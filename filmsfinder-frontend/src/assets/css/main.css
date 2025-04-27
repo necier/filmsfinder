@@ -1,0 +1,139 @@
+/* 文件路径: src/assets/css/main.css */
+/* —— 全局变量 —— */
+:root {
+    --color-bg-light: #f2f2f7;
+    --color-bg-gradient-start: rgb(242, 242, 247);
+    --color-bg-gradient-end: rgba(229, 229, 234, 1);
+    --color-primary: #007aff;
+    --color-text: #1c1c1e;
+    --color-text-muted: #6c6c70;
+    --radius: 12px;
+    --shadow-default: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    /* 卡片尺寸与倾斜配置 */
+    --card-default-scale: 1;
+    --card-hover-scale: 1.02;
+    --card-max-tilt-angle: 4;
+}
+
+/* 全局重置 & 基础 */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--color-text);
+    background: linear-gradient(145deg, var(--color-bg-gradient-start), var(--color-bg-gradient-end));
+}
+
+/* 导航栏（毛玻璃） */
+/*!important提高优先级覆盖框架或组件自带样式。*/
+.navbar {
+    background: rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-default);
+}
+
+.navbar .nav-link,
+.navbar .navbar-brand {
+    color: var(--color-text) !important;
+    font-weight: 500;
+}
+
+.navbar .nav-link:hover {
+    color: var(--color-primary) !important;
+}
+
+/* 通用卡片 */
+.card {
+    border: none;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-default);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* 表单控件 */
+.form-control,
+.form-select,
+textarea {
+    border: 1px solid #d1d1d6;
+    border-radius: var(--radius);
+    padding: 0.6rem 0.8rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus,
+.form-select:focus,
+textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.25);
+    outline: none;
+}
+
+/* 按钮 */
+.btn {
+    border-radius: var(--radius);
+    font-weight: 500;
+    padding: 0.6rem 1.2rem;
+    transition: opacity 0.2s, transform 0.1s;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    border: none;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.btn-outline-primary {
+    background: transparent;
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary);
+}
+
+.btn-outline-primary:hover {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+/* 标题 & 文本 */
+h1, h2, h3, h4, h5 {
+    color: var(--color-text);
+    margin-bottom: 1rem;
+}
+
+p, span, small {
+    color: var(--color-text-muted);
+}
+
+/* 链接 */
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+/* 布局容器 */
+.container {
+    padding: 1rem 2rem;
+}
+
+/* 图片圆角 */
+.img-fluid {
+    border-radius: var(--radius);
+}

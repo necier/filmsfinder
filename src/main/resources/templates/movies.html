@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>电影列表</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body class="p-4">
+<h1>电影列表</h1>
+<a class="btn btn-primary mb-3" th:href="@{/movies/new}">新增电影</a>
+<table class="table table-hover">
+    <thead>
+    <tr><th>ID</th><th>名称</th><th>地区</th><th>上映时间</th><th>操作</th></tr>
+    </thead>
+    <tbody>
+    <tr th:each="m : ${movies}">
+        <td th:text="${m.id}"></td>
+        <td th:text="${m.name}"></td>
+        <td th:text="${m.region}"></td>
+        <td th:text="${m.releaseDate}"></td>
+        <td>
+            <a th:href="@{'/movies/' + ${m.id}}" class="btn btn-sm btn-info">详情</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

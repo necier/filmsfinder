@@ -1,0 +1,225 @@
+/* 文件路径: src/assets/css/components.css */
+/* —— 通用细节组件 —— */
+
+.movie-detail .detail-item {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.movie-detail .label {
+    color: var(--color-text-muted);
+    min-width: 100px;
+    display: inline-block;
+    font-weight: 500;
+}
+
+.movie-detail .value {
+    color: var(--color-text);
+}
+
+/* 评论卡片 */
+.comment-card {
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.comment-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* 星级评分 */
+.star {
+    font-size: 1.2rem;
+    color: #d1d1d6;
+}
+
+.star.filled {
+    color: #ffcc00;
+}
+
+/* 评论头部 */
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+/* 评论内容 */
+.comment-content {
+    white-space: pre-wrap;
+    line-height: 1.6;
+    color: var(--color-text);
+}
+
+/* 空评论提示 */
+.empty-comments {
+    text-align: center;
+    padding: 2rem;
+    color: var(--color-text-muted);
+    border: 2px dashed #ececec;
+    border-radius: var(--radius);
+    margin: 2rem 0;
+}
+
+/* 评论表单 */
+.comment-form {
+    margin-top: 2rem;
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-default);
+}
+
+/* 电影列表卡片悬浮基础 */
+.card-hover-effect {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-hover-effect:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* 电影详情：段落换行 */
+.movie-detail .description {
+    white-space: pre-wrap;
+}
+
+/* 下载链接卡片 */
+.download-card {
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.download-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* 自定义海报比例容器（2:3） */
+.ratio-2x3 {
+    position: relative;
+    width: 100%;
+    padding-top: 150%; /* 3 / 2 = 150% */
+}
+
+.ratio-2x3 img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* —— 苹果风格毛玻璃搜索框 —— */
+.apple-search-group {
+    display: flex;
+    align-items: center;
+    height: 2.5rem;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 9999px;
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+    transition:
+            background 0.2s ease,
+            border-color 0.2s ease,
+            box-shadow 0.2s ease,
+            transform 0.2s ease;
+}
+
+/* 悬停时略微放大并加深阴影 */
+.apple-search-group:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* 聚焦时高亮背景和边框 */
+.apple-search-group:focus-within {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(255, 255, 255, 1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* 输入框部分：添加半透明背景与毛玻璃效果 */
+.apple-search-input {
+    flex: 1;
+    border: none;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(20px);
+    border-radius: calc(var(--radius) / 2);
+    padding: 0 0.75rem;
+    font-size: 0.95rem;
+    height: 100%;
+    outline: none;
+    color: var(--color-text);
+    width: 12rem;
+    transition:
+            width 0.3s ease,
+            background 0.2s ease;
+}
+
+/* 聚焦时扩展输入框宽度并加深背景 */
+.apple-search-input:focus {
+    width: 18rem;
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.apple-search-btn {
+    border: none;
+    background: transparent;
+    padding: 0 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.apple-search-btn:hover {
+    transform: scale(1.1);
+}
+
+.apple-search-btn svg {
+    width: 1rem;
+    height: 1rem;
+    color: rgba(0, 0, 0, 0.5);
+    transition: color 0.2s;
+}
+
+.apple-search-btn:hover svg {
+    color: rgba(0, 0, 0, 0.8);
+}
+
+/* —— 首页卡片统一样式 & 3D 效果 —— */
+.movie-list .card {
+    transform: scale(var(--card-default-scale));
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.movie-list .card-body {
+    padding: 0.75rem;
+}
+
+.movie-list .card-title {
+    font-size: 1.1rem;
+}
+
+/* 3D 倾斜基础样式 */
+.card-3d {
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+.card-3d:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}

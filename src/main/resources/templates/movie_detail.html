@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'电影详情 - ' + ${movie.name}"></title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body class="p-4">
+<h1 th:text="${movie.name}"></h1>
+<img th:src="${movie.posterUrl}" alt="Poster" class="img-fluid mb-3" style="max-width:200px;">
+<p><strong>地区：</strong><span th:text="${movie.region}"/></p>
+<p><strong>上映时间：</strong><span th:text="${movie.releaseDate}"/></p>
+<p><strong>时长：</strong><span th:text="${movie.duration}"/> 分钟</p>
+<p><strong>下载链接：</strong><a th:href="${movie.downloadUrl}" th:text="${movie.downloadUrl}"/></p>
+<hr/>
+<h3>用户评论</h3>
+<div th:each="c : ${movie.comments}" class="mb-2">
+    <strong th:text="${c.rating} + ' ★'"></strong> — <span th:text="${c.content}"></span>
+    <br/>
+    <small th:text="${#dates.format(c.createdAt, 'yyyy-MM-dd HH:mm')}"></small>
+</div>
+<hr/>
+<h4>添加评论</h4>
+<form th:action="@{'/movies/' + ${movie.id} + '/comments'}" method="post">
+    <div class="form-group">
+        <label>评分(1-5)</label>
+        <input class="form-control" type="number" name="rating" min="1" max="5" required>
+    </div>
+    <div class="form-group">
+        <label>评论内容</label>
+        <textarea class="form-control" name="content" rows="3" required></textarea>
+    </div>
+    <button class="btn btn-success mt-2">提交评论</button>
+</form>
+</body>
+</html>

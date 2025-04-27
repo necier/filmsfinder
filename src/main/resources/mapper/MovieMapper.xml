@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.filmsfinder.mapper.MovieMapper">
+    <resultMap id="movieResult" type="com.example.filmsfinder.domain.Movie">
+        <id     property="id"           column="id"/>
+        <result property="name"         column="name"/>
+        <result property="chineseName"  column="chinese_name"/>
+        <result property="releaseYear"  column="release_year"/>
+        <result property="type"         column="type"/>
+        <result property="language"     column="language"/>
+        <result property="duration"     column="duration"/>
+        <result property="posterUrl"    column="poster_url"/>
+        <result property="description"  column="description"/>
+        <result property="imdbLink"     column="imdb_link"/>
+    </resultMap>
+
+    <!-- 原有无分页查询 -->
+    <select id="selectAll" resultMap="movieResult">
+        SELECT * FROM movie
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="selectPaged" parameterType="map" resultMap="movieResult">
+        SELECT * FROM movie
+        ORDER BY id
+            LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 关键词模糊查询＋分页 -->
+    <select id="searchPaged" parameterType="map" resultMap="movieResult">
+        SELECT * FROM movie
+        WHERE name LIKE CONCAT('%', #{keyword}, '%')
+           OR chinese_name LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY id
+            LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 统计总数 -->
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*) FROM movie
+    </select>
+    <select id="countSearch" parameterType="string" resultType="int">
+        SELECT COUNT(*) FROM movie
+        WHERE name LIKE CONCAT('%', #{keyword}, '%')
+           OR chinese_name LIKE CONCAT('%', #{keyword}, '%')
+    </select>
+
+    <!-- 根据 ID 查询 -->
+    <select id="selectById" parameterType="long" resultMap="movieResult">
+        SELECT * FROM movie WHERE id = #{id}
+    </select>
+
+    <!-- 插入 -->
+    <insert id="insert" parameterType="com.example.filmsfinder.domain.Movie">
+        INSERT INTO movie (
+            name, chinese_name, release_year, type, language,
+            duration, poster_url, description, imdb_link
+        ) VALUES (
+                     #{name}, #{chineseName}, #{releaseYear}, #{type}, #{language},
+                     #{duration}, #{posterUrl}, #{description}, #{imdbLink}
+                 )
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="com.example.filmsfinder.domain.Movie">
+        UPDATE movie
+        SET name           = #{name},
+            chinese_name   = #{chineseName},
+            release_year   = #{releaseYear},
+            type           = #{type},
+            language       = #{language},
+            duration       = #{duration},
+            poster_url     = #{posterUrl},
+            description    = #{description},
+            imdb_link      = #{imdbLink}
+        WHERE id = #{id}
+    </update>
+</mapper>
