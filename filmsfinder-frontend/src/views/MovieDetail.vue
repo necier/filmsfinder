@@ -61,24 +61,46 @@
         <div class="col-md-4" v-for="link in filteredLinks" :key="link.id">
           <div class="card download-card">
             <div class="card-body">
-              <a :href="link.url" target="_blank">{{ link.url }}</a>
-              <small class="text-muted d-block mt-1">权限: {{ link.accessLevel }}</small>
+              <!-- 以文件名为链接文字 -->
+              <a
+                  :href="link.url"
+                  target="_blank"
+                  class="download-file-link"
+              >{{ link.fileName || link.url }}</a>
+
+              <div class="download-info">
+                <small>大小: {{ formatFileSize(link.fileSize) }}</small>
+                <small>分辨率: {{ link.resolution }}</small>
+              </div>
+
+              <small class="text-muted d-block mt-1">
+                权限: {{ link.accessLevel }}
+              </small>
             </div>
           </div>
         </div>
       </div>
       <div v-if="isAdmin" class="mt-3">
-        <button class="btn btn-sm btn-outline-primary" @click="showAddLink = !showAddLink">
+        <button
+            class="btn btn-sm btn-outline-primary"
+            @click="showAddLink = !showAddLink"
+        >
           {{ showAddLink ? '取消添加' : '添加下载链接' }}
         </button>
         <div v-if="showAddLink" class="mt-3">
-          <input v-model="newLink.url" placeholder="链接 URL" class="form-control mb-2" />
+          <input
+              v-model="newLink.url"
+              placeholder="链接 URL"
+              class="form-control mb-2"
+          />
           <select v-model="newLink.accessLevel" class="form-select mb-2">
             <option value="VISITOR">访客</option>
             <option value="USER">登录用户</option>
             <option value="ADMIN">管理员</option>
           </select>
-          <button class="btn btn-primary btn-sm" @click="addLink">确认添加</button>
+          <button class="btn btn-primary btn-sm" @click="addLink">
+            确认添加
+          </button>
         </div>
       </div>
     </div>
@@ -99,7 +121,7 @@
                     v-for="star in 5"
                     :key="star"
                     class="star"
-                    :class="{ 'filled': star <= comment.rating }"
+                    :class="{ filled: star <= comment.rating }"
                 >★</span>
               </div>
               <small class="text-muted">
@@ -139,7 +161,9 @@
                   required
               ></textarea>
             </div>
-            <button type="submit" class="btn btn-outline-primary">提交评论</button>
+            <button type="submit" class="btn btn-outline-primary">
+              提交评论
+            </button>
           </form>
         </div>
       </div>
@@ -200,8 +224,21 @@ export default {
       }
     },
     formatDateTime(dateTimeStr) {
-      const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+      const options = {
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit'
+      };
       return new Date(dateTimeStr).toLocaleString(undefined, options);
+    },
+    formatFileSize(bytes) {
+      if (!bytes && bytes !== 0) return '未知';
+      const units = ['B','KB','MB','GB','TB'];
+      let i = 0, size = bytes;
+      while (size >= 1024 && i < units.length - 1) {
+        size /= 1024;
+        i++;
+      }
+      return `${size.toFixed(2)} ${units[i]}`;
     },
     async submitComment() {
       if (!this.newComment.rating || !this.newComment.content) {

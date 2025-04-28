@@ -10,4 +10,5 @@ import java.util.List;
 public interface DownloadLinkMapper {
     List<DownloadLink> selectByMovieId(@Param("movieId") Long movieId);
     void insert(DownloadLink link);
+    void deleteById(@Param("id") Long id);
 }

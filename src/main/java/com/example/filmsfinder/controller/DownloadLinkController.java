@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
+
 import java.util.List;
 
 @RestController
@@ -17,13 +18,17 @@ public class DownloadLinkController {
     @Autowired
     private DownloadLinkService linkService;
 
-    /** 列出某部电影的所有下载链接 */
+    /**
+     * 列出某部电影的所有下载链接
+     */
     @GetMapping
     public List<DownloadLink> listLinks(@PathVariable Long movieId) {
         return linkService.getLinksByMovieId(movieId);
     }
 
-    /** 管理员添加下载链接 */
+    /**
+     * 管理员添加下载链接
+     */
     @PostMapping
     public ResponseEntity<String> addLink(
             @PathVariable Long movieId,
@@ -39,4 +44,22 @@ public class DownloadLinkController {
         linkService.addLink(link);
         return ResponseEntity.ok("添加成功");
     }
+
+    /**
+     * 管理员删除下载链接
+     */
+    @DeleteMapping("/{linkId}")
+    public ResponseEntity<Void> deleteLink(
+            @PathVariable Long movieId,
+            @PathVariable Long linkId,
+            HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null || !"ADMIN".equals(user.getUserType())) {
+            return ResponseEntity.status(403).build();
+        }
+        linkService.deleteLinkById(linkId);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }
