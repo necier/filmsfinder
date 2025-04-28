@@ -250,7 +250,7 @@ export default {
       await this.loadData(this.movie.id);
     },
     async addLink() {
-      await http.post(`/movies/${this.movie.id}/downloads`, this.newLink);
+      await http.post(`/movies/${this.movie.id}/downloads`, this.newLink,{ timeout: 30000 });
       this.newLink = { url: '', accessLevel: 'VISITOR' };
       this.showAddLink = false;
       await this.loadData(this.movie.id);
