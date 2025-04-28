@@ -90,6 +90,7 @@
 
 /* 下载链接卡片 */
 .download-card {
+    position: relative;
     border-radius: var(--radius);
     overflow: hidden;
     transition: transform 0.2s, box-shadow 0.2s;
@@ -98,6 +99,24 @@
 .download-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* 删除按钮 */
+.download-card .delete-link-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    transition: color 0.2s;
+}
+
+.download-card .delete-link-btn:hover {
+    color: var(--color-primary);
 }
 
 /* 自定义海报比例容器（2:3） */
@@ -115,6 +134,7 @@
     height: 100%;
     object-fit: cover;
 }
+
 /* —— 苹果风格毛玻璃搜索框 —— */
 .apple-search-group {
     display: flex;

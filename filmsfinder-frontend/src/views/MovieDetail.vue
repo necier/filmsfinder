@@ -1,3 +1,4 @@
+<!-- 文件路径: src/views/MovieDetail.vue -->
 <template>
   <div v-if="movie" class="container movie-detail">
     <!-- 电影详情 -->
@@ -50,7 +51,8 @@
         <router-link
             :to="`/edit-movie/${movie.id}`"
             class="btn btn-outline-primary btn-sm mt-2"
-        >前往编辑</router-link>
+        >前往编辑
+        </router-link>
       </div>
     </div>
 
@@ -61,6 +63,15 @@
         <div class="col-md-4" v-for="link in filteredLinks" :key="link.id">
           <div class="card download-card">
             <div class="card-body">
+              <!-- 管理员删除按钮 -->
+              <button
+                  v-if="isAdmin"
+                  @click="deleteLink(link.id)"
+                  class="delete-link-btn"
+                  title="删除链接"
+              >×
+              </button>
+
               <!-- 以文件名为链接文字 -->
               <a
                   :href="link.url"
@@ -71,6 +82,7 @@
               <div class="download-info">
                 <small>大小: {{ formatFileSize(link.fileSize) }}</small>
                 <small>分辨率: {{ link.resolution }}</small>
+                <small>类型: {{ link.category }}</small>
               </div>
 
               <small class="text-muted d-block mt-1">
@@ -80,6 +92,8 @@
           </div>
         </div>
       </div>
+
+      <!-- 管理员添加链接表单 -->
       <div v-if="isAdmin" class="mt-3">
         <button
             class="btn btn-sm btn-outline-primary"
@@ -98,6 +112,23 @@
             <option value="USER">登录用户</option>
             <option value="ADMIN">管理员</option>
           </select>
+          <select v-model="newLink.category" class="form-select mb-2">
+            <option value="MAGNET">MAGNET</option>
+            <option value="HTTP">HTTP</option>
+          </select>
+          <input
+              v-model.number="newLink.fileSize"
+              type="number"
+              placeholder="文件大小 (字节)"
+              class="form-control mb-2"
+          />
+          <select v-model="newLink.resolution" class="form-select mb-2">
+            <option disabled value="">选择分辨率</option>
+            <option value="720p">720p</option>
+            <option value="1080p">1080p</option>
+            <option value="2160p">2160p</option>
+            <option value="UNKNOWN">UNKNOWN</option>
+          </select>
           <button class="btn btn-primary btn-sm" @click="addLink">
             确认添加
           </button>
@@ -105,7 +136,7 @@
       </div>
     </div>
 
-    <!-- 评论模块 -->
+    <!-- 评论模块（未改动） -->
     <div class="comments-section">
       <h3 class="mb-4">观众评论 ({{ comments.length }})</h3>
       <div v-if="comments.length > 0">
@@ -173,7 +204,7 @@
 
 <script>
 import http from '@/utils/http';
-import { getCurrentUser } from '@/utils/auth';
+import {getCurrentUser} from '@/utils/auth';
 import placeholder from '@/assets/image/placeholder.jpg';
 
 export default {
@@ -184,8 +215,14 @@ export default {
       links: [],
       user: null,
       showAddLink: false,
-      newLink: { url: '', accessLevel: 'VISITOR' },
-      newComment: { rating: null, content: '' },
+      newLink: {
+        url: '',
+        accessLevel: 'VISITOR',
+        category: 'MAGNET',
+        fileSize: null,
+        resolution: ''
+      },
+      newComment: {rating: null, content: ''},
       placeholder
     };
   },
@@ -198,7 +235,7 @@ export default {
         return this.links.filter(l => l.accessLevel === 'VISITOR');
       }
       if (this.user.userType === 'USER') {
-        return this.links.filter(l => ['VISITOR','USER'].includes(l.accessLevel));
+        return this.links.filter(l => ['VISITOR', 'USER'].includes(l.accessLevel));
       }
       return this.links;
     }
@@ -232,7 +269,7 @@ export default {
     },
     formatFileSize(bytes) {
       if (!bytes && bytes !== 0) return '未知';
-      const units = ['B','KB','MB','GB','TB'];
+      const units = ['B', 'KB', 'MB', 'GB', 'TB'];
       let i = 0, size = bytes;
       while (size >= 1024 && i < units.length - 1) {
         size /= 1024;
@@ -245,16 +282,33 @@ export default {
         alert('请填写完整信息');
         return;
       }
-      await http.post(`/movies/${this.movie.id}/comments`, { ...this.newComment });
-      this.newComment = { rating: null, content: '' };
+      await http.post(`/movies/${this.movie.id}/comments`, {...this.newComment});
+      this.newComment = {rating: null, content: ''};
       await this.loadData(this.movie.id);
     },
     async addLink() {
-      await http.post(`/movies/${this.movie.id}/downloads`, this.newLink,{ timeout: 30000 });
-      this.newLink = { url: '', accessLevel: 'VISITOR' };
+      // 提交管理员填写的所有属性
+      await http.post(
+          `/movies/${this.movie.id}/downloads`,
+          {...this.newLink},
+          {timeout: 30000}
+      );
+      this.newLink = {
+        url: '',
+        accessLevel: 'VISITOR',
+        category: 'MAGNET',
+        fileSize: null,
+        resolution: ''
+      };
       this.showAddLink = false;
+      await this.loadData(this.movie.id);
+    },
+    async deleteLink(linkId) {
+      if (!confirm('确定要删除此下载链接吗？')) return;
+      await http.delete(`/movies/${this.movie.id}/downloads/${linkId}`);
       await this.loadData(this.movie.id);
     }
   }
 };
 </script>
+

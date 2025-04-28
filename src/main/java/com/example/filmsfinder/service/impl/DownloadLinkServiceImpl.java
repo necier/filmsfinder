@@ -30,28 +30,59 @@ public class DownloadLinkServiceImpl implements DownloadLinkService {
 
     /**
      * 添加下载链接：
-     * - Magnet 链接：从 URL 参数中解析 fileName（dn）和分辨率（文件名中的 xxxp）
-     * - HTTP 链接：默认 UNKNOWN
+     * - 优先使用管理员填写的 category、fileSize、resolution
+     * - Magnet 链接：若管理员未填写，则从 URL 参数或文件名中解析
+     * - HTTP 链接：若管理员未填写，则设置默认 UNKNOWN
      */
     @Override
     public void addLink(DownloadLink link) {
         String url = link.getUrl();
+
+        // 管理员填写的优先值
+        String adminCategory = link.getCategory();
+        Long adminFileSize = link.getFileSize();
+        String adminResolution = link.getResolution();
+
         if (url.startsWith("magnet:")) {
-            link.setCategory("MAGNET");
+            // category
+            if (adminCategory == null || adminCategory.isEmpty()) {
+                link.setCategory("MAGNET");
+            }
+
+            // 解析文件名（dn 参数）
             Map<String, String> params = parseQueryParams(url);
-            // 从 dn 参数获取文件名
             String dn = params.get("dn");
             link.setFileName(dn);
-            // 文件大小无法通过 Magnet 链接获取，留空或默认
-            link.setFileSize(null);
-            // 从文件名解析 xxxp
-            link.setResolution(parseResolution(dn));
+
+            // resolution
+            if (adminResolution != null && !adminResolution.isEmpty()) {
+                link.setResolution(adminResolution);
+            } else {
+                link.setResolution(parseResolution(dn));
+            }
+
+            // fileSize
+            link.setFileSize(adminFileSize);
+
         } else {
-            link.setCategory("HTTP");
-            link.setFileName(null);
-            link.setFileSize(null);
-            link.setResolution("UNKNOWN");
+            // HTTP 或其他
+            if (adminCategory == null || adminCategory.isEmpty()) {
+                link.setCategory("HTTP");
+            }
+            // resolution
+            if (adminResolution != null && !adminResolution.isEmpty()) {
+                link.setResolution(adminResolution);
+            } else {
+                link.setResolution("UNKNOWN");
+            }
+            // fileSize
+            link.setFileSize(adminFileSize);
+            // fileName 保持管理员未填写时为空
+            if (link.getFileName() == null) {
+                link.setFileName(null);
+            }
         }
+
         linkMapper.insert(link);
     }
 
