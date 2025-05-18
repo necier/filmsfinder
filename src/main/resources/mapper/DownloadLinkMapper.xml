@@ -3,28 +3,31 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.filmsfinder.mapper.DownloadLinkMapper">
     <resultMap id="linkResult" type="com.example.filmsfinder.domain.DownloadLink">
-        <id     property="id"           column="id"/>
-        <result property="movieId"      column="movie_id"/>
-        <result property="url"          column="url"/>
-        <result property="accessLevel"  column="access_level"/>
-        <result property="category"     column="category"/>
-        <result property="fileName"     column="file_name"/>
-        <result property="fileSize"     column="file_size"/>
-        <result property="resolution"   column="resolution"/>
+        <id property="id" column="id"/>
+        <result property="movieId" column="movie_id"/>
+        <result property="url" column="url"/>
+        <result property="accessLevel" column="access_level"/>
+        <result property="category" column="category"/>
+        <result property="fileName" column="file_name"/>
+        <result property="fileSize" column="file_size"/>
+        <result property="resolution" column="resolution"/>
     </resultMap>
 
     <select id="selectByMovieId" parameterType="long" resultMap="linkResult">
-        SELECT * FROM download_link WHERE movie_id = #{movieId}
+        SELECT *
+        FROM download_link
+        WHERE movie_id = #{movieId}
     </select>
 
     <insert id="insert" parameterType="com.example.filmsfinder.domain.DownloadLink">
         INSERT INTO download_link
         (movie_id, url, access_level, category, file_name, file_size, resolution)
-        VALUES
-            (#{movieId}, #{url}, #{accessLevel}, #{category}, #{fileName}, #{fileSize}, #{resolution})
+        VALUES (#{movieId}, #{url}, #{accessLevel}, #{category}, #{fileName}, #{fileSize}, #{resolution})
     </insert>
 
     <delete id="deleteById" parameterType="long">
-        DELETE FROM download_link WHERE id = #{id}
+        DELETE
+        FROM download_link
+        WHERE id = #{id}
     </delete>
 </mapper>

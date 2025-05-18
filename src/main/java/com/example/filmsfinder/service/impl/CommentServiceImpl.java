@@ -11,7 +11,8 @@ import java.util.List;
 
 @Service
 public class CommentServiceImpl implements CommentService {
-    @Autowired private CommentMapper commentMapper;
+    @Autowired
+    private CommentMapper commentMapper;
 
     @Override
     public List<Comment> getComments(Long movieId) {
@@ -22,5 +23,10 @@ public class CommentServiceImpl implements CommentService {
     public void addComment(Comment comment) {
         comment.setCreatedAt(LocalDateTime.now());
         commentMapper.insert(comment);
+    }
+
+    @Override
+    public void deleteComment(Comment comment) {
+        commentMapper.delete(comment);
     }
 }

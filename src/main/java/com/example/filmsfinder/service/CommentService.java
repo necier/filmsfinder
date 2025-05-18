@@ -7,4 +7,6 @@ import java.util.List;
 public interface CommentService {
     List<Comment> getComments(Long movieId);
     void addComment(Comment comment);
+
+    void deleteComment(Comment comment);
 }

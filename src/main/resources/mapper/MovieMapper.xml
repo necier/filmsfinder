@@ -31,7 +31,8 @@
 
     <!-- 关键词模糊查询＋分页 -->
     <select id="searchPaged" parameterType="map" resultMap="movieResult">
-        SELECT * FROM movie
+        SELECT *
+        FROM movie
         WHERE name LIKE CONCAT('%', #{keyword}, '%')
            OR chinese_name LIKE CONCAT('%', #{keyword}, '%')
         ORDER BY id

@@ -11,5 +11,4 @@ public class Comment {
     private Integer rating;  // 打分（1–5）
     private String content;  // 评论内容
     private LocalDateTime createdAt;
-    // getters/setters...
 }

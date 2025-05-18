@@ -10,4 +10,6 @@ import java.util.List;
 public interface CommentMapper {
     List<Comment> selectByMovieId(@Param("movieId") Long movieId);
     void insert(Comment comment);
+
+    void delete(Comment comment);
 }
