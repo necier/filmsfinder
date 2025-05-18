@@ -8,7 +8,6 @@ import java.util.List;
 
 @Mapper
 public interface MovieMapper {
-    // 原有
     List<Movie> selectAll();
     Movie selectById(@Param("id") Long id);
     void insert(Movie movie);

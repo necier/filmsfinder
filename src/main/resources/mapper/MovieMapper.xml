@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.filmsfinder.mapper.MovieMapper">
     <resultMap id="movieResult" type="com.example.filmsfinder.domain.Movie">
+<!--        property:java对象中的属性名 column:数据库中的列名-->
         <id     property="id"           column="id"/>
         <result property="name"         column="name"/>
         <result property="chineseName"  column="chinese_name"/>
@@ -41,6 +42,7 @@
     <select id="countAll" resultType="int">
         SELECT COUNT(*) FROM movie
     </select>
+<!--    统计符合搜索结果的总数-->
     <select id="countSearch" parameterType="string" resultType="int">
         SELECT COUNT(*) FROM movie
         WHERE name LIKE CONCAT('%', #{keyword}, '%')

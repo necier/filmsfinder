@@ -9,6 +9,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -19,19 +22,19 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public String register(@RequestBody User user) {
+    public ResponseEntity<String> register(@RequestBody User user) {
         if (user.getUsername() == null || user.getUsername().length() < 5 || user.getUsername().length() > 20) {
-            return "用户名长度需在5~20之间";
+            return ResponseEntity.badRequest().body("用户名长度需在5~20之间");
         }
         if (!user.getPassword().matches("^[A-Za-z0-9]{5,20}$")) {
-            return "密码格式不合法";
+            return ResponseEntity.badRequest().body("密码格式不合法");
         }
         if (userService.findByUsername(user.getUsername()) != null) {
-            return "用户名已存在";
+            return ResponseEntity.badRequest().body("用户名已经存在");
         }
         user.setUserType("USER");
         userService.register(user);
-        return "注册成功";
+        return ResponseEntity.ok("注册成功");
     }
 
     @PostMapping("/login")
@@ -54,11 +57,16 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<User> me(HttpSession session) {
+    public ResponseEntity<Map<String, Object>> me(HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return ResponseEntity.ok(user);
+        //直接返回User对象会暴露密码，故只返回需要的属性
+        Map<String, Object> userSafeData = new HashMap<>();
+        userSafeData.put("id", user.getId());
+        userSafeData.put("username", user.getUsername());
+        userSafeData.put("userType", user.getUserType());
+        return ResponseEntity.ok(userSafeData);
     }
 }

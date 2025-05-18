@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +25,12 @@ public class MovieController {
      */
     @GetMapping
     public Map<String, Object> listAll(
+            // 分页查询
             @RequestParam(defaultValue = "1") int page,
+            // 模糊查询
             @RequestParam(required = false) String keyword) {
 
+        //一页24张卡片
         int pageSize = 24;
         int offset = (page - 1) * pageSize;
 
