@@ -106,6 +106,7 @@ export default {
     async doLogout() {
       await logout();
       this.user = null;
+      //跳转回主页
       this.$router.push('/');
     },
     onSearch() {

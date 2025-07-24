@@ -251,7 +251,7 @@ export default {
         const [mRes, cRes, lRes] = await Promise.all([
           http.get(`/movies/${id}`),
           http.get(`/movies/${id}/comments`),
-          http.get(`/movies/${id}/downloads`)
+          http.get(`/movies/${id}/downloadlinks`)
         ]);
         this.movie = mRes.data;
         this.comments = cRes.data;

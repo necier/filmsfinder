@@ -19,6 +19,12 @@
         WHERE movie_id = #{movieId}
     </select>
 
+    <select id="selectById" parameterType="long" resultMap="linkResult">
+        SELECT *
+        FROM download_link
+        WHERE id = #{id}
+    </select>
+
     <insert id="insert" parameterType="com.example.filmsfinder.domain.DownloadLink">
         INSERT INTO download_link
         (movie_id, url, access_level, category, file_name, file_size, resolution)

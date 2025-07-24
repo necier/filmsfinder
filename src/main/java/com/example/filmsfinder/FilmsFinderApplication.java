@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class FilmsFinderApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(FilmsFinderApplication.class, args);
     }
 

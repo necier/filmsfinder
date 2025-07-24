@@ -1,13 +1,10 @@
 package com.example.filmsfinder.controller;
 
 import com.example.filmsfinder.domain.Movie;
-import com.example.filmsfinder.domain.User;
 import com.example.filmsfinder.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.servlet.http.HttpSession;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,8 +13,13 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/movies")
 public class MovieController {
+
+    private final MovieService movieService;
+
     @Autowired
-    private MovieService movieService;
+    MovieController(MovieService movieService) {
+        this.movieService = movieService;
+    }
 
     /**
      * 分页 + 关键词搜索
@@ -55,24 +57,22 @@ public class MovieController {
 
     @GetMapping("/{id}")
     public Movie getDetail(@PathVariable Long id) {
+        //查找缓存
+
         return movieService.getMovieDetail(id);
     }
 
     @PostMapping
-    public void addMovie(@RequestBody Movie movie, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null || !"ADMIN".equals(user.getUserType())) {
-            throw new RuntimeException("权限不足");
-        }
+    public void addMovie(@RequestBody Movie movie) {
+
+        //仅ADMIN可操作
         movieService.addMovie(movie);
     }
 
     @PutMapping("/{id}")
-    public void updateMovie(@PathVariable Long id, @RequestBody Movie movie, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null || !"ADMIN".equals(user.getUserType())) {
-            throw new RuntimeException("权限不足");
-        }
+    public void updateMovie(@PathVariable Long id, @RequestBody Movie movie) {
+
+        //仅ADMIN可操作
         movie.setId(id);
         movieService.updateMovie(movie);
     }

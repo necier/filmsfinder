@@ -9,10 +9,20 @@ spring:
   sql:
     init:
       mode: never
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.example.filmsfinder.domain
   configuration:
     map-underscore-to-camel-case: true
+
+
+jwt:
+  secret: "Ua9kPRGUyl8J4onUQURb9ld02a+AlrDiVRdR4HvrobDkk//EegWFVw63cZZaa5HdyOoPeJ02ITkWg9hIaSe7y4GDdJk5BC+3ouP6HecXEdE="
+  # 单位秒
+  expiration: 3600
 

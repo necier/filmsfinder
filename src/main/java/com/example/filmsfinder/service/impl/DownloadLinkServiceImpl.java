@@ -3,30 +3,76 @@ package com.example.filmsfinder.service.impl;
 import com.example.filmsfinder.domain.DownloadLink;
 import com.example.filmsfinder.mapper.DownloadLinkMapper;
 import com.example.filmsfinder.service.DownloadLinkService;
+import com.example.filmsfinder.util.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
 public class DownloadLinkServiceImpl implements DownloadLinkService {
 
+    private final DownloadLinkMapper linkMapper;
+    private final StringRedisTemplate stringRedisTemplate;
+
     @Autowired
-    private DownloadLinkMapper linkMapper;
+    DownloadLinkServiceImpl(DownloadLinkMapper linkMapper, StringRedisTemplate stringRedisTemplate) {
+        this.linkMapper = linkMapper;
+        this.stringRedisTemplate = stringRedisTemplate;
+    }
 
     /**
      * 列出某部电影的所有下载链接
      */
     @Override
     public List<DownloadLink> getLinksByMovieId(Long movieId) {
-        return linkMapper.selectByMovieId(movieId);
+        //先搜索缓存
+        String redisKey = "movie:downloadlinks:" + movieId;
+        Set<String> downloadLinkJson = stringRedisTemplate.opsForZSet()
+                .range(redisKey, 0, -1);
+        List<DownloadLink> res = new ArrayList<DownloadLink>();
+        if (downloadLinkJson != null && !downloadLinkJson.isEmpty()) {
+            // 反序列化成 List<DownloadLink>
+            for (String downloadLink : downloadLinkJson) {
+                DownloadLink temp = JsonUtils.toBean(downloadLink, DownloadLink.class);
+                res.add(temp);
+            }
+            return res;
+        }
+        //未命中缓存，查找数据库
+        res = linkMapper.selectByMovieId(movieId);
+        //写入缓存
+        for (DownloadLink downloadLink : res) {
+            double score = downloadLink.getId();
+            stringRedisTemplate.opsForZSet().add(redisKey, JsonUtils.toJson(downloadLink), score);
+        }
+        return res;
     }
+
+    /**
+     * 通过linkId找到对应的link
+     */
+    @Override
+    public DownloadLink getLinkByLinkId(Long linkId) {
+        String redisKey = "downloadlink:" + linkId;
+        var linkJson = stringRedisTemplate.opsForValue().get(redisKey);
+        DownloadLink downloadLink;
+        if (linkJson != null) {
+            downloadLink = JsonUtils.toBean(linkJson, DownloadLink.class);
+            return downloadLink;
+        }
+        //未命中缓存
+        downloadLink = linkMapper.selectByLinkId(linkId);
+        //存入缓存
+        stringRedisTemplate.opsForValue().set(redisKey, JsonUtils.toJson(downloadLink));
+        return downloadLink;
+    }
+
 
     /**
      * 添加下载链接：
@@ -82,8 +128,11 @@ public class DownloadLinkServiceImpl implements DownloadLinkService {
                 link.setFileName(null);
             }
         }
-
+        //先操作数据库
         linkMapper.insert(link);
+        //删除缓存
+        String redisKey = "movie:downloadlinks:" + link.getMovieId();
+        stringRedisTemplate.delete(redisKey);
     }
 
     /**
@@ -91,7 +140,11 @@ public class DownloadLinkServiceImpl implements DownloadLinkService {
      */
     @Override
     public void deleteLinkById(Long linkId) {
+        //先操作数据库
         linkMapper.deleteById(linkId);
+        //删除缓存
+        String redisKey = "movie:downloadlinks:" + linkId;
+        stringRedisTemplate.delete(redisKey);
     }
 
     /**
