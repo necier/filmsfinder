@@ -56,7 +56,7 @@
     </select>
 
     <!-- 插入 -->
-    <insert id="insert" parameterType="com.example.filmsfinder.domain.Movie">
+    <insert id="insert" parameterType="com.example.filmsfinder.domain.Movie" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO movie (
             name, chinese_name, release_year, type, language,
             duration, poster_url, description, imdb_link

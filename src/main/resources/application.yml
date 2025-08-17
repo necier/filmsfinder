@@ -13,6 +13,15 @@ spring:
     redis:
       host: localhost
       port: 6379
+  rabbitmq:
+    host: localhost
+    virtual-host: /filmsfinder
+    username: filmsfinder
+    password: admin
+    port: 5672
+    listener:
+      simple:
+        prefetch: 1   #能者多劳
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml

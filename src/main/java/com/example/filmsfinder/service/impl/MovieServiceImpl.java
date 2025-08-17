@@ -71,6 +71,7 @@ public class MovieServiceImpl implements MovieService {
         String redisKey = "movie:" + id;
         stringRedisTemplate.opsForValue().set(redisKey, JsonUtils.toJson(movie));
         //更新movie:all缓存
+        redisKey = "movie:all";
         stringRedisTemplate.opsForZSet().add(redisKey, JsonUtils.toJson(movie), movie.getId());
     }
 
