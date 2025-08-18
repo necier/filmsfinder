@@ -264,3 +264,88 @@
     font-size: 0.9rem;
     color: var(--color-text-muted);
 }
+.pagination {
+    --pagination-size: 2.5rem; /* 定义分页按钮尺寸 */
+    --pagination-gap: 0.5rem;   /* 定义按钮间距 */
+    gap: var(--pagination-gap);
+    margin-top: 2rem;
+}
+
+/* 移除 Bootstrap 的默认 margin */
+.pagination .page-item {
+    margin: 0 !important;
+}
+
+.pagination .page-link {
+    /* 基础样式重置 */
+    border: none;
+    color: var(--color-text);
+    font-weight: 500;
+
+    /* 尺寸与对齐 */
+    min-width: var(--pagination-size);
+    height: var(--pagination-size);
+    line-height: var(--pagination-size);
+    padding: 0 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* 风格化 */
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+
+    /* 动效 */
+    transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease,
+            background-color 0.2s ease,
+            color 0.2s ease;
+}
+
+/* 鼠标悬浮效果 */
+.pagination .page-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.8);
+    color: var(--color-primary); /* 悬浮时文字变主题色 */
+}
+
+/* 移除聚焦时的默认阴影，因为有自定义效果 */
+.pagination .page-link:focus {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* 当前激活页面的样式 */
+.pagination .page-item.active .page-link {
+    background-color: var(--color-primary);
+    color: #fff;
+    transform: translateY(-1px); /* 激活时也稍微浮起 */
+    box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+}
+
+/* 激活页面悬浮时，保持样式稳定 */
+.pagination .page-item.active .page-link:hover {
+    background-color: var(--color-primary);
+    color: #fff;
+    opacity: 0.95;
+}
+
+/* 禁用状态的样式 (例如 "上一页" / "下一页") */
+.pagination .page-item.disabled .page-link {
+    background: rgba(230, 230, 230, 0.5);
+    color: var(--color-text-muted);
+    opacity: 0.7;
+    pointer-events: none;
+    box-shadow: none;
+    transform: none;
+}
+
+/* 省略号(...)的特殊样式，它没有背景和阴影 */
+.pagination .page-item.disabled span.page-link {
+    background: transparent;
+    backdrop-filter: none;
+    box-shadow: none;
+}

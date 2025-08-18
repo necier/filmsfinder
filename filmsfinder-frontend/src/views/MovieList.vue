@@ -27,10 +27,6 @@
       </div>
     </div>
 
-    <div v-if="total > size" class="mt-4 text-center">
-      第 {{ page }} 页 / 共 {{ totalPages }} 页
-    </div>
-
     <nav v-if="totalPages > 1" aria-label="Page navigation">
       <ul class="pagination justify-content-center">
         <li class="page-item" :class="{ disabled: page <= 1 }">
