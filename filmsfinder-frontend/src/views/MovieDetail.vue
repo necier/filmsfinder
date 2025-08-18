@@ -289,7 +289,7 @@ export default {
     async addLink() {
       // 提交管理员填写的所有属性
       await http.post(
-          `/movies/${this.movie.id}/downloads`,
+          `/movies/${this.movie.id}/downloadlinks`,
           {...this.newLink},
           {timeout: 30000}
       );
@@ -305,8 +305,18 @@ export default {
     },
     async deleteLink(linkId) {
       if (!confirm('确定要删除此下载链接吗？')) return;
-      await http.delete(`/movies/${this.movie.id}/downloads/${linkId}`);
-      await this.loadData(this.movie.id);
+      if (!linkId) {
+        alert('删除失败：找不到该下载链接的 id（linkId 为空）');
+        return;
+      }
+      try {
+        const res = await http.delete(`/movies/${this.movie.id}/downloadlinks/${linkId}`);
+        console.log('[deleteLink] response:', res);
+        await this.loadData(this.movie.id);
+      } catch (e) {
+        console.error('[deleteLink] error:', e);
+        alert('删除失败：' + (e.response?.data || e.message));
+      }
     }
   }
 };

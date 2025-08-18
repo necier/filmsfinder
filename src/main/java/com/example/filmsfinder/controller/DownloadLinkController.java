@@ -59,7 +59,7 @@ public class DownloadLinkController {
             @PathVariable Long linkId) {
 
         //仅ADMIN可操作
-        linkService.deleteLinkById(linkId);
+        linkService.deleteLinkById(movieId,linkId);
         return ResponseEntity.noContent().build();
     }
 

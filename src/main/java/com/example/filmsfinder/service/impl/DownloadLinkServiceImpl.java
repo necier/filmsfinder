@@ -139,11 +139,11 @@ public class DownloadLinkServiceImpl implements DownloadLinkService {
      * 删除下载链接
      */
     @Override
-    public void deleteLinkById(Long linkId) {
+    public void deleteLinkById(Long movieId, Long linkId) {
         //先操作数据库
         linkMapper.deleteById(linkId);
-        //删除缓存
-        String redisKey = "movie:downloadlinks:" + linkId;
+        //删除该电影的下载链接缓存
+        String redisKey = "movie:downloadlinks:" + movieId;
         stringRedisTemplate.delete(redisKey);
     }
 
