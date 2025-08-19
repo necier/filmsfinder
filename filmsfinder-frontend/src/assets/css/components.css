@@ -349,3 +349,112 @@
     backdrop-filter: none;
     box-shadow: none;
 }
+
+/* 模糊背景层 */
+.movie-detail-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    /* 模糊并调暗背景，突出前景 */
+    filter: blur(50px) brightness(0.9);
+    /* 放大一点避免模糊后出现白边 */
+    transform: scale(1.1);
+    /* 置于最底层 */
+    z-index: -2;
+    transition: background-image 0.5s ease-in-out;
+}
+
+/* 半透明叠加层 */
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* 使用全局背景色变量并增加透明度 */
+    background: rgba(242, 242, 247, 0.85);
+    /* 叠加一层毛玻璃效果，增加层次感 */
+    backdrop-filter: blur(15px);
+    /* 在背景图之上，在内容之下 */
+    z-index: -1;
+}
+
+.detail-info-panel .movie-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: var(--color-text);
+}
+
+.detail-info-panel .movie-subtitle {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--color-text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.detail-info-panel .meta-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.detail-info-panel .meta-info .badge {
+    font-size: 0.95rem;
+    padding: 0.5em 1em;
+    border-radius: var(--radius);
+    font-weight: 500;
+    /* 使用更柔和的背景和边框 */
+    background-color: rgba(255, 255, 255, 0.7);
+    color: var(--color-text-muted);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.detail-info-panel .section-title {
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.3rem;
+    /* 用下划线突出章节标题 */
+    border-bottom: 2px solid var(--color-primary);
+    display: inline-block;
+}
+
+.detail-info-panel .description-text {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #333;
+    white-space: pre-wrap;
+}
+
+.movie-detail-content .card {
+    background: rgba(242, 242, 247, 0.65);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.movie-detail-content .comment-form.card {
+    background: rgba(242, 242, 247, 0.5);
+}
+
+.movie-detail-content .download-card:hover,
+.movie-detail-content .comment-card:hover,
+.movie-detail-content .comment-form.card:hover {
+    transform: translateY(-4px) scale(1.02);
+    background: rgba(242, 242, 247, 0.8);
+    border-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 10px 35px 0 rgba(0, 0, 0, 0.15);
+}
+
+.movie-detail-content .edit-section.card:hover {
+    transform: none;
+    background: rgba(242, 242, 247, 0.7);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
